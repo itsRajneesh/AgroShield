@@ -1,0 +1,10 @@
+# Ignore large folders and temporary files
+dataset/
+ml_env/
+uploads/
+__pycache__/
+*.pyc
+
+# Ignore sensitive files
+.env
+*.env

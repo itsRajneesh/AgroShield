@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | AgroShield</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+
+    <style>
+      /* Integrated Alert Styling */
+      .alert {
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid transparent;
+        animation: fadeIn 0.4s ease-in;
+      }
+      .alert-success {
+        background: #ecfdf5;
+        color: #065f46;
+        border-color: #10b981;
+      }
+      .alert-danger,
+      .alert-error {
+        background: #fef2f2;
+        color: #991b1b;
+        border-color: #f87171;
+      }
+      .alert-info {
+        background: #eff6ff;
+        color: #1e40af;
+        border-color: #60a5fa;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .auth-container {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        min-height: 100vh;
+        background: white;
+      }
+
+      .auth-video-section {
+        position: relative;
+        overflow: hidden;
+        background: #000;
+        /* Added Flexbox to center the video element */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auth-video-section video {
+        /* Remove absolute positioning to let Flexbox handle it */
+        width: 100%;
+        height: 100vh;
+        /* 'cover' ensures it fills the area, 'contain' shows the whole video */
+        object-fit: fill;
+        opacity: 0.8;
+      }
+
+      .auth-form-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+        background: var(--extra-light, #f9fafb); /* Fallback color added */
+      }
+
+      .form-card {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .form-header h2 {
+        font-size: 2.2rem;
+        color: var(--text-dark, #111827);
+        margin-bottom: 0.5rem;
+      }
+
+      .description {
+        color: var(--text-light, #6b7280);
+        margin-bottom: 2rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-dark, #111827);
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        outline: none;
+        transition: 0.3s;
+      }
+
+      .input-group input:focus {
+        border-color: var(--primary-color, #3c9e3b);
+        box-shadow: 0 0 0 3px rgba(60, 158, 59, 0.1);
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 43px; /* Adjusted to align with input center */
+        cursor: pointer;
+        color: #9ca3af;
+        transition: 0.2s;
+      }
+      .password-toggle:hover {
+        color: var(--primary-color, #3c9e3b);
+      }
+
+      .btn-primary {
+        width: 100%;
+        background: var(--primary-color, #3c9e3b);
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1rem;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-color-dark, #2d7a2c);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-footer {
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 0.95rem;
+        color: #6b7280;
+      }
+
+      .form-footer a {
+        color: var(--primary-color, #3c9e3b);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .form-footer a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 992px) {
+        .auth-container {
+          grid-template-columns: 1fr;
+        }
+        .auth-video-section {
+          display: none;
+        }
+        .auth-form-section {
+          padding: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-video-section">
+        <video
+          src="{{ url_for('static', filename='media/farmer-app-screen-1.mp4') }}"
+          muted
+          loop
+          autoplay
+        ></video>
+      </div>
+
+      <div class="auth-form-section">
+        <div class="form-card">
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %} {% endif %} {% endwith %}
+
+          <div class="form-header">
+            <h2>Welcome Back</h2>
+            <p class="description">
+              Login to manage your crops and detect diseases.
+            </p>
+          </div>
+
+          <form id="Loggedin" action="/login" method="post">
+            <div class="input-group">
+              <label for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="name@example.com"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                placeholder="••••••••"
+              />
+              <i class="fa-solid fa-eye password-toggle" id="show-password"></i>
+            </div>
+
+            <button type="submit" class="btn-primary">Sign In</button>
+          </form>
+
+          <div class="form-footer">
+            <p><a href="/forgot_password">Forgot Password?</a></p>
+            <p>
+              Don't have an account? <a href="/signup">Create one for free</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("show-password")
+        .addEventListener("click", function () {
+          const pass = document.getElementById("password");
+          if (pass.type === "password") {
+            pass.type = "text";
+            this.classList.replace("fa-eye", "fa-eye-slash");
+          } else {
+            pass.type = "password";
+            this.classList.replace("fa-eye-slash", "fa-eye");
+          }
+        });
+    </script>
+  </body>
+</html>

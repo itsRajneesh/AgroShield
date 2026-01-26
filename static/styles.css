@@ -1,0 +1,362 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+:root {
+    --primary-color: #3c9e3b;
+    --primary-color-dark: #3c9e3b;
+    --secondary-color: #78bf3b;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --extra-light: #efffec;
+    --max-width: 1200px;
+}
+/* .nav__content .auth-buttons{
+    margin-left: 100px;
+} */
+.auth-buttons a{
+    height: fit-content;
+    width: fit-content;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    text-decoration: none;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--extra-light);
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+nav {
+    width: 100%;
+    height: 11%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #d9fbd6;
+    z-index: 99;
+}
+
+.nav__content {
+    max-width: var(--max-width);
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Add this to your styles.css file */
+
+.nav__links {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    background-color: #d9fbd6; 
+    color: #3c9e3b; 
+    padding: 8px 16px; 
+    border-radius: 4px; 
+    text-decoration: none; 
+    font-size: 16px; 
+    font-weight: bold; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.logout-button:hover {
+    background-color: #e60000; 
+    color: #fff; 
+}
+
+.logout-button:focus {
+    outline: none; 
+}
+
+
+.inner2 {
+    font-size: 30px;
+}
+
+.inner2:hover {
+    color: rgb(18, 28, 165);
+    font-size: large;
+}
+
+nav .logo a {
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    transition: 0.3s;
+}
+
+nav .logo a:hover {
+    color: var(--primary-color-dark);
+}
+
+#check {
+    display: none;
+}
+
+.checkbox {
+    display: none;
+}
+
+nav .menu-btn {
+    display: none;
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    list-style: none;
+}
+
+ul li a {
+    padding: 0.5rem 1rem;
+    border: 2px solid transparent;
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: 0.3s;
+}
+
+ul li a:hover {
+    border-top-color: var(--secondary-color);
+    border-bottom-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.section {
+    background-color: var(--extra-light);
+}
+
+.section__container {
+    min-height: 100vh;
+    max-width: var(--max-width);
+    margin: auto;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.subtitle {
+    letter-spacing: 2px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 3rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.title span {
+    font-weight: 600;
+}
+
+.description {
+    line-height: 1.5rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.action__btns {
+    display: flex;
+    gap: 1rem;
+}
+
+.fa-camera {
+    padding: 5px;
+}
+
+.un {
+    position: relative;
+    top: 11rem;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hire__me {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.5rem 2rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    transition: 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(60, 158, 59, 0.2);
+}
+
+.hire__me:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-2px);
+}
+
+.image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image video {
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+}
+
+#footer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* height: 70vh; */
+}
+
+.outer1 {
+    margin: 2rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    color: var(--text-light);
+}
+
+.outer2 {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer_img {
+    display: flex;
+    justify-content: center;
+    /* margin: 1rem; */
+    gap: 2rem;
+}
+
+.iminput {
+    display: none;
+}
+
+.footimg {
+    width: min(3rem);
+}
+
+.contact {
+    font-size: 60px;
+    text-align: center;
+}
+
+.info {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.05rem;
+}
+
+.un {
+    text-align: center;
+    margin: 7rem;
+}
+
+.anchor {
+    color: rgb(2, 2, 2);
+    transition: 0.3s;
+}
+
+.anchor:hover {
+    text-decoration: underline;
+    color: #8f2bec;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100vh;
+    background-color: var(--extra-light);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s;
+    z-index: 100;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+}
+
+.icon-container {
+    position: relative;
+    top: 15rem;
+
+    display: flex;
+    justify-content: center;
+
+    gap: 1rem;
+    z-index: 100;
+    /* Ensures it's above other elements */
+}
+
+.icon-container .icon {
+    font-size: 2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.icon-container .icon:hover {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+/* Sidebar Toggle Button Styles */
+.menu-btn {
+    font-size: 2rem;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+.hire__me {
+    /* ... existing styles ... */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hire__me:active {
+    transform: scale(0.95);
+}

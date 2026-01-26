@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  font-family: Roboto;
+}
+body{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 41, 0);
+  overflow-x: hidden;
+}
+.Container1{
+  height: 90%;
+  width: 22%;
+  background-color: gray;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.Container1 video{
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  object-fit: fill;
+}
+.Container2{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 90%;
+  width: 60%;
+  background-color: rgb(0, 183, 0);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.ErrorFlash{
+  padding: 10px;
+  height: 35%;
+  width: 90%;
+}
+.Main1{
+  display: block;
+  height: 52%;
+  width: 90%;
+}
+nav{
+  font-size: 2em;
+  font-weight: bold;
+}
+form{
+  height: 75%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+form input,option{
+  height: 30px;
+  width: 30% ;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+}
+form select{
+  height: 30px;
+  width: 30% ;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+}
+form label{
+  font-size: 1em;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button{
+  background-color: #007bff;
+  padding: 10px;
+  height: 40%;
+  width: 20% ;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+#Againlogin{
+  background-color: #007bff;
+  padding: 10px;
+  position: relative;
+  right: 70px;
+  height: auto;
+  width: auto;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+#ForgotPassword{
+  background-color: #007bff;
+  padding: 10px;
+  position: relative;
+  right: 70px;
+  height: auto;
+  width: auto;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+  transition: background-color 0.3s ease;
+}
+a{
+  color: black;
+  text-decoration: none;
+}
+
+#show-password{
+  position: relative;
+  left: 230px;
+  bottom: 32px;
+  cursor: pointer;
+}
+
+/* Styles for flash messages */
+.flash {
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  font-size: 1em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flash.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.flash.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Remove default list styles for flash messages */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* For screens with a maximum width of 1200px */
+@media (max-width: 1200px) {
+  .Container1 {
+    width: 30%;
+  }
+  .Container2 {
+    width: 70%;
+  }
+  form input,
+  option {
+    width: 40%;
+  }
+  form select {
+    width: 40%;
+  }
+  button {
+    width: 30%;
+  }
+  #Againlogin {
+    right: 40px;
+  }
+}
+
+/* For screens with a maximum width of 992px */
+@media (max-width: 992px) {
+  .Container1 {
+    width: 40%;
+  }
+  .Container2 {
+    width: 60%;
+  }
+  form input,
+  option {
+    width: 50%;
+  }
+  form select {
+    width: 50%;
+  }
+  button {
+    width: 40%;
+  }
+  #Againlogin {
+    right: 20px;
+  }
+}

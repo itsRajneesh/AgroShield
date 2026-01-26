@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnostic Result | AgroShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}" />
+</head>
+<body>
+    <div class="page-container">
+        <header class="main-header">
+            <div class="logo">
+                <i class="fa-solid fa-leaf"></i>
+                <span>AgroShield</span>
+            </div>
+        </header>
+
+        <main class="content-wrapper">
+            <div class="result-card">
+                <div class="card-header">
+                    {% if prediction.startswith('Error') or prediction == 'No Disease Detected / Not a Plant Leaf' %}
+                        <div class="status-badge error">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Invalid Analysis</span>
+                        </div>
+                    {% else %}
+                        <div class="status-badge success">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>AI Analysis Successful</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="diagnostic-grid">
+                    <div class="image-section">
+                        <span class="label">Captured Specimen</span>
+                        <div class="image-frame">
+                            {% if image_url %}
+                                <img src="{{ image_url }}" alt="Analyzed Leaf">
+                            {% else %}
+                                <div class="placeholder-img">
+                                    <i class="fa-solid fa-image"></i>
+                                    <p>No Image Available</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <div class="data-group">
+                            <span class="label">Detection Result</span>
+                            <h2 class="prediction-title">{{ prediction }}</h2>
+                        </div>
+
+                        <div class="data-group">
+                            <div class="confidence-header">
+                                <span class="label">AI Confidence Level</span>
+                                <span class="percentage">{{ confidence }}%</span>
+                            </div>
+                            <div class="meter">
+                                <span class="meter-fill" style="--width: {{ confidence }}%;"></span>
+                            </div>
+                        </div>
+
+                        <div class="action-zone">
+                            <a href="{{ url_for('dashboard') }}" class="btn-primary">
+                                <i class="fa-solid fa-camera-retro"></i>
+                                <span>New Analysis</span>
+                            </a>
+                            <button onclick="window.print()" class="btn-outline">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span>Save Report</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="page-footer">
+            <p>&copy; 2026 AgroShield AI • Smart Farming Diagnostics</p>
+        </footer>
+    </div>
+</body>
+</html>

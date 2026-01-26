@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | AgroShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="video-container">
+            <video src="{{ url_for('static', filename='media/invideo-ai-1080 AI Revolutionizing Farming_ Detect Plant 2024-09-05.mp4') }}" muted loop autoplay></video>
+            <div class="overlay-text">
+                <h1>AgroShield</h1>
+                <p>Protecting crops with AI</p>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="ErrorFlash">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <main class="signup-main">
+                <header>
+                    <h2>Create Account</h2>
+                    <p>Enter your details to get started</p>
+                </header>
+
+                <form id="signupForm" action="/signup" method="post">
+                    <div class="input-grid">
+                        <div class="field">
+                            <label>First Name</label>
+                            <input type="text" id="Firstname" name="Firstname" required placeholder="Firstname">
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input type="text" id="LastName" name="LastName" required placeholder="LastName">
+                        </div>
+                        <div class="field full">
+                            <label>Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="name@example.com">
+                        </div>
+                        <div class="field relative">
+                            <label>Password</label>
+                            <input type="password" id="password" name="password" required>
+                            <i class="fa-solid fa-eye toggle-pw" id="show-password"></i>
+                        </div>
+                        <div class="field relative">
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                            <i class="fa-solid fa-eye toggle-pw" id="show-password-signup"></i>
+                        </div>
+                        <div class="field">
+                            <label>Phone</label>
+                            <input type="text" id="phone" name="phone" required placeholder="Phone Number">
+                        </div>
+                        <div class="field">
+                            <label>Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        <div class="field full">
+                            <label>Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-submit" onclick="submitForm()">Register</button>
+                        <p>Already a member? <a href="/login">Login</a></p>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Password toggles
+        document.querySelectorAll('.toggle-pw').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+
+        function submitForm() {
+            const form = document.getElementById('signupForm');
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+
+            if (password !== confirm) {
+                alert("Passwords do not match!");
+                return;
+            }
+            form.submit();
+        }
+    </script>
+</body>
+</html>

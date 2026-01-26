@@ -1,0 +1,352 @@
+# AgroShield – AI-Powered Plant Disease Detection Web Application
+
+[![Python](https://img.shields.io/badge/Python-3.10-blue)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.10-orange)](https://www.tensorflow.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.0-green)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248)](https://www.mongodb.com/)
+[![CUDA](https://img.shields.io/badge/CUDA-11.2-0095D5)](https://developer.nvidia.com/cuda-toolkit)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+**AgroShield** is a full-stack web application that empowers farmers, researchers, and agriculture enthusiasts to **upload plant leaf images** and receive **instant AI-based disease classification** with high accuracy (98.32% validation). Built with **Flask**, **TensorFlow**, and **MongoDB Atlas**, it includes secure user authentication with OTP-based password recovery and GPU-accelerated inference/training.
+
+The ML model uses **transfer learning** with **EfficientNetB0** on the PlantVillage dataset (87,867 images, 38 classes). Training and inference leverage **NVIDIA RTX 3050 Laptop GPU** with CUDA support for faster performance.
+
+### Project Highlights
+
+- **Model Accuracy**: 98.32% validation accuracy (best checkpoint 98.37% at Epoch 18)
+- **Dataset**: 70,295 training images + 17,572 validation images (38 classes)
+- **Training Time**: ~3–4 hours on NVIDIA RTX 3050 Laptop GPU (1668 MB VRAM)
+- **GPU Usage**: CUDA 11.2 + cuDNN 8.1 enabled for TensorFlow 2.10
+- **Backend**: Flask + MongoDB Atlas + Gmail SMTP for OTP
+- **Frontend**: Responsive HTML/CSS + Jinja2 templates
+- **Security**: Password hashing (Werkzeug), session-based auth, OTP reset
+- **Non-Plant Handling**: OpenCV pre-check prevents false positives on non-leaf images
+
+### Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Dataset Details](#dataset-details)
+- [Model Architecture & Training](#model-architecture--training)
+- [GPU/CUDA Usage & Hardware](#gpucuda-usage--hardware)
+- [Prediction Logic & Confidence](#prediction-logic--confidence)
+- [Backend Logic & Routes](#backend-logic--routes)
+- [Frontend Templates & UI Flow](#frontend-templates--ui-flow)
+- [Installation & Setup](#installation--setup)
+- [How to Run](#how-to-run)
+- [Usage Guide](#usage-guide)
+- [Troubleshooting](#troubleshooting)
+- [Future Improvements](#future-improvements)
+- [Contributors](#contributors)
+- [License](#license)
+
+## Project Overview
+
+AgroShield allows users to:
+
+1. Register and login securely
+2. Reset password using OTP sent to registered email
+3. Upload plant leaf images from dashboard
+4. Get instant AI-based disease prediction with confidence score
+5. View result with uploaded image, disease name, confidence %, and safe handling for non-plant images
+
+The ML model is trained using transfer learning on the PlantVillage dataset, achieving **98.32% validation accuracy** in 20 epochs. The application uses **GPU acceleration** for faster training and inference.
+
+## Features
+
+- **User Authentication**: Signup, Login, Logout with password hashing
+- **Password Recovery**: OTP-based reset via Gmail SMTP
+- **Image Upload & Prediction**: Drag-drop or browse, real-time classification
+- **Confidence Score**: 0–100% model confidence displayed
+- **Safe Non-Plant Detection**: OpenCV checks if image is a plant leaf; shows appropriate message
+- **MongoDB Integration**: User data stored in cloud MongoDB Atlas
+- **Responsive UI**: Works on desktop & mobile
+- **Debug Logging**: Detailed prediction logs in terminal (top predictions, entropy, final decision)
+
+## Technologies Used
+
+### Backend & ML
+- Python 3.10
+- TensorFlow 2.10.0 (with GPU support: CUDA 11.2, cuDNN 8.1)
+- Keras (integrated with TensorFlow)
+- EfficientNetB0 (transfer learning from ImageNet)
+- NumPy <2.0 (compatibility with TF 2.10)
+- OpenCV (plant leaf detection via green color & contours)
+- Pillow (image handling)
+- Flask (web framework)
+- Flask-PyMongo (MongoDB client)
+- Werkzeug (password hashing)
+- python-dotenv (.env handling)
+- smtplib (Gmail OTP sending)
+
+### Frontend
+- HTML5 + Jinja2 templating
+- CSS3 (custom responsive styles: styles.css, styles2.css, etc.)
+- JavaScript (script.js for form interactions)
+- Font Awesome 6.6.0 (icons)
+
+### Database & Services
+- MongoDB Atlas (cloud NoSQL for users collection)
+- Gmail SMTP (OTP emails)
+
+### Hardware & Acceleration
+- NVIDIA RTX 3050 Laptop GPU (4 GB GDDR6, 1668 MB usable VRAM in training)
+- CUDA Toolkit 11.2
+- cuDNN 8.1
+- TensorFloat-32 enabled for faster matrix multiplication
+
+## Project Structure
+
+```
+MAIN PAGE/
+├── .env                           # Environment variables (SECRET_KEY, MONGO_URI, EMAIL_USER, etc.)
+├── .vscode/                       # VS Code settings
+├── dataset/                       # Plant disease images
+│   ├── train/                     # 70,295 images (38 classes)
+│   ├── valid/                     # 17,572 images (validation)
+│   └── test/                      # Optional test set
+├── ml_env/                        # Virtual environment
+├── static/                        # Static assets
+│   ├── media/                     # Videos/images (e.g., farmer-app-screen-1.mp4)
+│   ├── uploads/                   # Uploaded images (runtime)
+│   ├── forgot_password.css
+│   ├── login.css
+│   ├── reset_password.css
+│   ├── script.js
+│   ├── signup.css
+│   ├── styles.css
+│   └── styles2.css
+├── templates/                     # HTML templates (Jinja2)
+│   ├── forgot_password.html
+│   ├── index.html                 # Dashboard (upload form)
+│   ├── login.html
+│   ├── otp_email.html             # OTP email template
+│   ├── reset_password.html
+│   ├── result.html                # Prediction result
+│   └── signup.html
+├── uploads/                       # Temporary uploads folder
+├── app.py                         # Main Flask application
+├── train_model.py                 # Model training script
+├── class_names.json               # 38 disease classes list
+├── plant_disease_model_best.h5    # Best model weights (checkpoint)
+├── requirements.txt               # Python dependencies
+├── set_admin.py                   # Admin setup script (optional)
+└── README.md                      # This file
+```
+
+## Dataset Details
+
+- **Source**: Kaggle – New Plant Diseases Dataset (Augmented) / PlantVillage Dataset
+  - Link: https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset
+- **Total Images**: 87,867
+  - Training: 70,295 (80%)
+  - Validation: 17,572 (20%)
+- **Classes**: 38 (healthy + diseased varieties of common crops)
+- **Class List** (from class_names.json):
+
+```json
+[
+  "Apple___Apple_scab",
+  "Apple___Black_rot",
+  "Apple___Cedar_apple_rust",
+  "Apple___healthy",
+  "Blueberry___healthy",
+  "Cherry_(including_sour)___Powdery_mildew",
+  "Cherry_(including_sour)___healthy",
+  "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+  "Corn_(maize)___Common_rust_",
+  "Corn_(maize)___Northern_Leaf_Blight",
+  "Corn_(maize)___healthy",
+  "Grape___Black_rot",
+  "Grape___Esca_(Black_Measles)",
+  "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+  "Grape___healthy",
+  "Orange___Haunglongbing_(Citrus_greening)",
+  "Peach___Bacterial_spot",
+  "Peach___healthy",
+  "Pepper,_bell___Bacterial_spot",
+  "Pepper,_bell___healthy",
+  "Potato___Early_blight",
+  "Potato___Late_blight",
+  "Potato___healthy",
+  "Raspberry___healthy",
+  "Soybean___healthy",
+  "Squash___Powdery_mildew",
+  "Strawberry___Leaf_scorch",
+  "Strawberry___healthy",
+  "Tomato___Bacterial_spot",
+  "Tomato___Early_blight",
+  "Tomato___Late_blight",
+  "Tomato___Leaf_Mold",
+  "Tomato___Septoria_leaf_spot",
+  "Tomato___Spider_mites Two-spotted_spider_mite",
+  "Tomato___Target_Spot",
+  "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+  "Tomato___Tomato_mosaic_virus",
+  "Tomato___healthy"
+]
+```
+
+- **Batch Allocation**:
+  - Batch size: 32
+  - Train batches per epoch: 2197 (70,295 ÷ 32 ≈ 2197)
+  - Validation batches per epoch: 549 (17,572 ÷ 32 ≈ 549)
+  - Shuffle: True (train), False (validation)
+
+## Model Architecture & Training
+
+### Architecture
+
+The model is a transfer learning-based CNN using **EfficientNetB0** as the backbone.
+
+- **Base Model**: EfficientNetB0 (pre-trained on ImageNet)
+  - Input shape: (224, 224, 3)
+  - Weights: "imagenet"
+  - Trainable: False (frozen – 4,049,571 non-trainable params)
+- **Custom Head**:
+  - GlobalAveragePooling2D: Reduces spatial dimensions
+  - Dense(512, activation="relu"): High-level feature learning
+  - Dropout(0.5): Regularization to prevent overfitting
+  - Dense(38, activation="softmax"): Output layer for 38 classes
+- **Total Parameters**: 4,724,937
+  - Trainable: 675,366 (only head)
+  - Non-trainable: 4,049,571 (frozen EfficientNet)
+- **Compilation**:
+  - Optimizer: Adam (learning_rate=0.001)
+  - Loss: Categorical Crossentropy
+  - Metrics: Accuracy
+
+### Training Process
+
+- **Data Loading**:
+  - ImageDataGenerator with augmentation for train (rotation, shift, zoom, flip)
+  - preprocess_input for EfficientNet normalization
+  - flow_from_directory with batch_size=32
+
+- **Callbacks**:
+  - EarlyStopping (patience=5, restore_best_weights=True)
+  - ModelCheckpoint (monitor val_accuracy, save_best_only=True, save_weights_only=True)
+  - ReduceLROnPlateau (factor=0.5, patience=3, min_lr=1e-6)
+
+- **Training Summary** (20 epochs, RTX 3050 GPU):
+
+| Epoch | Train Loss | Train Acc (%) | Val Loss | Val Acc (%) | LR       | Notes                              |
+|-------|------------|---------------|----------|-------------|----------|------------------------------------|
+| 1     | 0.4534     | 85.80         | 0.1565   | 94.67       | 0.0010   | Strong start                       |
+| 5     | 0.1785     | 93.99         | 0.0897   | 96.94       | 0.0010   | Rapid improvement                  |
+| 8     | 0.1571     | 94.86         | 0.0901   | 96.98       | →0.0005  | LR reduced                         |
+| 10    | 0.1016     | 96.59         | 0.0626   | 97.89       | 0.0005   | High accuracy                      |
+| 15    | 0.0861     | 97.17         | 0.0591   | 98.09       | 0.0005   | Near peak                          |
+| 18    | 0.0657     | 97.75         | 0.0497   | **98.37**   | 0.00025  | Best validation accuracy           |
+| 20    | 0.0624     | 97.89         | 0.0478   | 98.32       | 0.00025  | Final (EarlyStopping not triggered)|
+
+- **Best Model**: Epoch 18 (val_accuracy 98.37%)
+- **Final Validation Accuracy**: 98.32%
+- **Best Saved File**: plant_disease_model_best.h5 (weights only)
+
+## GPU/CUDA Usage & Hardware
+
+- **Hardware**: NVIDIA RTX 3050 Laptop GPU (4 GB GDDR6, 1668 MB usable VRAM)
+- **CUDA Toolkit**: 11.2
+- **cuDNN**: 8.1
+- **TensorFlow**: 2.10.0 (with GPU support)
+- **Key Logs**:
+  - `Created device /job:localhost/replica:0/task:0/device:GPU:0 with 1668 MB memory`
+  - `Loaded cuDNN version 8101`
+  - `TensorFloat-32 will be used for the matrix multiplication`
+- **Why GPU?**: Speeds up training (3–4 hours vs 10–15 hours on CPU) and inference (milliseconds per image).
+- **How to Verify GPU Usage**:
+  ```python
+  import tensorflow as tf
+  print(tf.config.list_physical_devices('GPU'))
+  ```
+  Output: `[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]`
+
+## Prediction Logic & Confidence
+
+1. **Pre-Check (OpenCV)**: Check if image is a plant leaf (green HSV range 35–85, green ratio > 30%, contours found).
+   - If not → "Not a Plant Leaf – Please upload a clear plant leaf image"
+2. **Preprocessing**: Resize 224×224, preprocess_input
+3. **Inference**: model.predict → softmax probabilities
+4. **Class & Confidence**: argmax → class index, max(prob) × 100 → confidence
+5. **Threshold & Uncertainty**:
+   - < 90%: "No Disease Detected (Low Confidence)"
+   - > 98% and second highest < 0.5% and entropy < 0.05: Disease name
+   - Otherwise: "Uncertain / Likely Not a Plant Leaf"
+
+## Backend Logic & Routes
+
+- **/login** (POST): Authenticate from MongoDB
+- **/signup** (POST): Create user with hashed password
+- **/forgot_password** (POST): Send OTP via Gmail SMTP
+- **/reset_password** (POST): Verify OTP & update password
+- **/dashboard** (GET): Protected upload form
+- **/predict** (POST): Upload image → plant check → predict → result
+- **/uploads/<filename>** (GET): Serve uploaded images
+- **/logout** (GET): Clear session
+
+## Frontend Templates & UI Flow
+
+- **login.html** → login form
+- **signup.html** → registration
+- **forgot_password.html** → email for OTP
+- **reset_password.html** → OTP + new password
+- **index.html** (dashboard) → upload form + instructions
+- **result.html** → prediction, confidence, image, "Upload another" link
+
+## Installation & Setup
+
+1. Clone repo
+2. `python -m venv ml_env`
+3. `.\ml_env\Scripts\activate`
+4. `pip install -r requirements.txt`
+5. Create `.env` file (see example below)
+6. `python app.py`
+
+**.env Example**:
+
+```dotenv
+SECRET_KEY='your secret key'
+MONGO_URI='Mongo URL Link Address'
+EMAIL_USER='your gmail password'
+EMAIL_PASSWORD=your_app_password
+```
+
+## How to Run
+
+- Training: `python train_model.py`
+- Application: `python app.py` (http://127.0.0.1:5000)
+
+## Usage Guide
+
+1. Signup/Login
+2. Go to dashboard
+3. Upload leaf image
+4. Get prediction result
+
+## Troubleshooting
+
+- Model not loading: Check plant_disease_model_best.h5 exists
+- GPU not used: Ensure CUDA 11.2 + cuDNN 8.1 installed
+- NumPy error: `pip install "numpy<2.0" --force-reinstall`
+- MongoDB fail: Check MONGO_URI
+- Email OTP not sending: Use Gmail App Password
+
+## Future Improvements
+
+- Disease treatment recommendations
+- Mobile app
+- Real-time camera detection
+- More crops/diseases
+- Deploy on cloud (AWS/Heroku)
+
+## Contributors
+
+- **Rajneesh** – Full-stack developer, ML training, deployment
+
+## License
+
+MIT License – free to use, modify, and distribute for learning/research purposes.
+```
