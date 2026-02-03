@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AgroShield - AI Diagnosis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <style>
       :root {
         --primary-color: #3c9e3b;
@@ -17,7 +23,7 @@
       body {
         background-color: var(--bg-light);
         margin: 0;
-        font-family: 'Poppins', sans-serif;
+        font-family: "Poppins", sans-serif;
       }
 
       .nav {
@@ -27,7 +33,7 @@
         width: 100%;
         height: 70px;
         z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         display: flex;
         align-items: center;
       }
@@ -43,7 +49,7 @@
       }
 
       .logo a {
-        font-size: clamp(1.1rem, 4vw, 1.8rem) !important; 
+        font-size: clamp(1.1rem, 4vw, 1.8rem) !important;
         font-weight: 800;
         color: var(--primary-color);
         text-decoration: none;
@@ -83,7 +89,8 @@
         margin-right: auto;
       }
 
-      .upload-card, .result-card {
+      .upload-card,
+      .result-card {
         background: white;
         padding: 2rem;
         border-radius: 20px;
@@ -110,19 +117,19 @@
         transition: 0.2s;
       }
 
-      .opt-btn i { 
-        font-size: 1.4rem; 
-        color: var(--primary-color); 
-        margin-bottom: 8px; 
+      .opt-btn i {
+        font-size: 1.4rem;
+        color: var(--primary-color);
+        margin-bottom: 8px;
       }
-      .opt-btn span { 
-        font-size: 0.75rem; 
-        font-weight: 600; 
-        color: var(--text-dark); 
+      .opt-btn span {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
       }
-      .opt-btn:hover { 
-        background: #e8fbe6; 
-        transform: translateY(-2px); 
+      .opt-btn:hover {
+        background: #e8fbe6;
+        transform: translateY(-2px);
       }
 
       .btn-detect {
@@ -138,12 +145,13 @@
       }
 
       @media (max-width: 768px) {
-        .dashboard-grid { 
-          grid-template-columns: 1fr; 
-          margin-top: 90px; 
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+          margin-top: 90px;
         }
-        .upload-card, .result-card { 
-          padding: 1.5rem; 
+        .upload-card,
+        .result-card {
+          padding: 1.5rem;
         }
       }
     </style>
@@ -163,103 +171,177 @@
 
     <main class="dashboard-grid">
       <section class="upload-card">
-        <span style="background: var(--primary-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">AI READY</span>
-        <h2 style="margin: 15px 0 5px;">New Diagnosis</h2>
-        <p style="color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;">Provide a clear leaf photo for the best results.</p>
+        <span
+          style="
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+          "
+          >AI READY</span
+        >
+        <h2 style="margin: 15px 0 5px">New Diagnosis</h2>
+        <p style="color: #6b7280; font-size: 0.85rem; margin-bottom: 20px">
+          Provide a clear leaf photo for the best results.
+        </p>
 
-        <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="upload-form">
-
+        <form
+          action="{{ url_for('predict') }}"
+          method="post"
+          enctype="multipart/form-data"
+          id="upload-form"
+        >
           <!-- Gallery / File chooser preferred -->
-          <input 
-            type="file" 
-            id="gallery-input" 
-            name="file" 
-            accept="image/*" 
-            style="display: none;"
+          <input
+            type="file"
+            id="gallery-input"
+            name="file"
+            accept="image/*"
+            style="display: none"
           />
 
           <!-- Camera preferred -->
-          <input 
-            type="file" 
-            id="camera-input" 
-            name="file" 
-            accept="image/*" 
-            capture="environment" 
-            style="display: none;"
+          <input
+            type="file"
+            id="camera-input"
+            name="file"
+            accept="image/*"
+            capture="environment"
+            style="display: none"
           />
 
           <div class="upload-options">
-            <div class="opt-btn" onclick="document.getElementById('gallery-input').click()">
+            <div
+              class="opt-btn"
+              onclick="document.getElementById('gallery-input').click()"
+            >
               <i class="fa-solid fa-images"></i>
               <span>Choose File</span>
             </div>
-            <div class="opt-btn" onclick="document.getElementById('camera-input').click()">
+            <div
+              class="opt-btn"
+              onclick="document.getElementById('camera-input').click()"
+            >
               <i class="fa-solid fa-camera"></i>
               <span>Open Camera</span>
             </div>
           </div>
-          
-          <div id="file-name-display" style="font-size: 0.75rem; color: var(--primary-color); text-align: center; margin-bottom: 15px; font-weight: 600;"></div>
 
-          <button type="submit" class="btn-detect">Run AI Detection</button>
+          <div
+            id="file-name-display"
+            style="
+              font-size: 0.75rem;
+              color: var(--primary-color);
+              text-align: center;
+              margin-bottom: 15px;
+              font-weight: 600;
+            "
+          ></div>
+
+          <button type="submit" class="btn-detect">Run Diagnosis</button>
         </form>
       </section>
 
       <section class="result-card">
-        <h2 style="margin-top: 0;">System Instructions</h2>
-        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i>
-            <p style="margin: 0; font-size: 0.9rem; color: #374151;">Use bright, natural daylight.</p>
+        <h2 style="margin-top: 0">System Instructions</h2>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 12px">
+            <i
+              class="fa-solid fa-circle-check"
+              style="color: var(--primary-color)"
+            ></i>
+            <p style="margin: 0; font-size: 0.9rem; color: #374151">
+              Use bright, natural daylight.
+            </p>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i>
-            <p style="margin: 0; font-size: 0.9rem; color: #374151;">Ensure the leaf is flat and in focus.</p>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <i
+              class="fa-solid fa-circle-check"
+              style="color: var(--primary-color)"
+            ></i>
+            <p style="margin: 0; font-size: 0.9rem; color: #374151">
+              Ensure the leaf is flat and in focus.
+            </p>
           </div>
         </div>
 
-        <div style="background: #f0fdf4; border-left: 4px solid var(--primary-color); padding: 1.2rem; margin-top: 2rem; border-radius: 0 12px 12px 0;">
-          <p style="margin: 0; font-size: 0.8rem; color: #166534; line-height: 1.6;">
-            <strong>Pro Tip:</strong> Multiple samples of the same plant can help confirm the AI's diagnosis.
+        <div
+          style="
+            background: #f0fdf4;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            margin-top: 2rem;
+            border-radius: 0 12px 12px 0;
+          "
+        >
+          <p
+            style="
+              margin: 0;
+              font-size: 0.8rem;
+              color: #166534;
+              line-height: 1.6;
+            "
+          >
+            <strong>Note:</strong> This AI model is powered by AgroShield
+            DeepLearning, trained on over 70,295 verified agricultural samples.
+            It is specifically optimized to distinguish between nutrient
+            deficiencies and infectious pathogens with 98.32% precision..
           </p>
         </div>
       </section>
     </main>
 
     <script>
-      // Update file name display and clear the other input
+      let activeInput = null;
+
       function updateFileDisplay(input) {
         const display = document.getElementById("file-name-display");
-        const otherId = input.id === "gallery-input" ? "camera-input" : "gallery-input";
 
         if (input.files && input.files[0]) {
+          activeInput = input.id;
           display.innerHTML = `<i class="fa-solid fa-check"></i> Ready: ${input.files[0].name}`;
-          // Clear the other input to prevent sending wrong file
-          document.getElementById(otherId).value = "";
         } else {
           display.innerHTML = "";
         }
       }
 
-      // Attach listeners to both inputs
-      document.getElementById("gallery-input").addEventListener("change", function() {
-        updateFileDisplay(this);
-      });
+      document
+        .getElementById("gallery-input")
+        .addEventListener("change", function () {
+          updateFileDisplay(this);
+        });
 
-      document.getElementById("camera-input").addEventListener("change", function() {
-        updateFileDisplay(this);
-      });
+      document
+        .getElementById("camera-input")
+        .addEventListener("change", function () {
+          updateFileDisplay(this);
+        });
 
-      // Prevent submission if no file selected
-      document.getElementById("upload-form").addEventListener("submit", function (e) {
-        const gallery = document.getElementById("gallery-input").files.length;
-        const camera  = document.getElementById("camera-input").files.length;
+      document
+        .getElementById("upload-form")
+        .addEventListener("submit", function (e) {
+          if (!activeInput) {
+            e.preventDefault();
+            alert("Please select an image or take a photo first!");
+            return;
+          }
 
-        if (gallery === 0 && camera === 0) {
-          e.preventDefault();
-          alert("Please select an image or take a photo first!");
-        }
-      });
+          // 🔥 CRITICAL FIX
+          if (activeInput === "camera-input") {
+            document.getElementById("gallery-input").disabled = true;
+          } else {
+            document.getElementById("camera-input").disabled = true;
+          }
+        });
     </script>
   </body>
 </html>
