@@ -20,7 +20,6 @@
         font-family: 'Poppins', sans-serif;
       }
 
-      /* Navigation Fix: Prevents hiding elements on mobile */
       .nav {
         background: white;
         position: fixed;
@@ -73,12 +72,11 @@
         border-radius: 6px;
       }
 
-      /* Dashboard Layout */
       .dashboard-grid {
         display: grid;
         grid-template-columns: 1fr 1.5fr;
         gap: 2rem;
-        margin-top: 100px; /* Space below fixed nav */
+        margin-top: 100px;
         padding: 1rem;
         max-width: var(--max-width);
         margin-left: auto;
@@ -92,7 +90,6 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
       }
 
-      /* Upload Buttons Styling */
       .upload-options {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -171,22 +168,32 @@
         <p style="color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;">Provide a clear leaf photo for the best results.</p>
 
         <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="upload-form">
-          <!-- Single input – prefers camera on mobile -->
+
+          <!-- Gallery / File chooser preferred -->
           <input 
             type="file" 
-            id="photo-input" 
+            id="gallery-input" 
+            name="file" 
+            accept="image/*" 
+            style="display: none;"
+          />
+
+          <!-- Camera preferred -->
+          <input 
+            type="file" 
+            id="camera-input" 
             name="file" 
             accept="image/*" 
             capture="environment" 
-            style="display: none;" 
+            style="display: none;"
           />
 
           <div class="upload-options">
-            <div class="opt-btn" onclick="document.getElementById('photo-input').click()">
+            <div class="opt-btn" onclick="document.getElementById('gallery-input').click()">
               <i class="fa-solid fa-images"></i>
               <span>Choose File</span>
             </div>
-            <div class="opt-btn" onclick="document.getElementById('photo-input').click()">
+            <div class="opt-btn" onclick="document.getElementById('camera-input').click()">
               <i class="fa-solid fa-camera"></i>
               <span>Open Camera</span>
             </div>
@@ -220,19 +227,35 @@
     </main>
 
     <script>
-      // Show selected file name
-      document.getElementById("photo-input").addEventListener("change", function() {
+      // Update file name display and clear the other input
+      function updateFileDisplay(input) {
         const display = document.getElementById("file-name-display");
-        if (this.files && this.files[0]) {
-          display.innerHTML = `<i class="fa-solid fa-check"></i> Ready: ${this.files[0].name}`;
+        const otherId = input.id === "gallery-input" ? "camera-input" : "gallery-input";
+
+        if (input.files && input.files[0]) {
+          display.innerHTML = `<i class="fa-solid fa-check"></i> Ready: ${input.files[0].name}`;
+          // Clear the other input to prevent sending wrong file
+          document.getElementById(otherId).value = "";
         } else {
           display.innerHTML = "";
         }
+      }
+
+      // Attach listeners to both inputs
+      document.getElementById("gallery-input").addEventListener("change", function() {
+        updateFileDisplay(this);
       });
 
-      // Prevent form submission if no file is selected
+      document.getElementById("camera-input").addEventListener("change", function() {
+        updateFileDisplay(this);
+      });
+
+      // Prevent submission if no file selected
       document.getElementById("upload-form").addEventListener("submit", function (e) {
-        if (document.getElementById("photo-input").files.length === 0) {
+        const gallery = document.getElementById("gallery-input").files.length;
+        const camera  = document.getElementById("camera-input").files.length;
+
+        if (gallery === 0 && camera === 0) {
           e.preventDefault();
           alert("Please select an image or take a photo first!");
         }
