@@ -10,7 +10,13 @@
 <body>
     <div class="auth-wrapper">
         <div class="video-container">
-            <video src="{{ url_for('static', filename='media/invideo-ai-1080 AI Revolutionizing Farming_ Detect Plant 2024-09-05.mp4') }}" muted loop autoplay></video>
+            <video 
+                src="{{ url_for('static', filename='media/invideo-ai-1080 AI Revolutionizing Farming_ Detect Plant 2024-09-05.mp4') }}" 
+                muted 
+                loop 
+                autoplay 
+                playsinline
+            ></video>
             <div class="overlay-text">
                 <h1>AgroShield</h1>
                 <p>Protecting crops with AI</p>
@@ -34,40 +40,40 @@
                     <p>Enter your details to get started</p>
                 </header>
 
-                <form id="signupForm" action="/signup" method="post">
+                <form id="signupForm" action="/signup" method="post" novalidate>
                     <div class="input-grid">
                         <div class="field">
-                            <label>First Name</label>
-                            <input type="text" id="Firstname" name="Firstname" required placeholder="Firstname">
+                            <label for="Firstname">First Name</label>
+                            <input type="text" id="Firstname" name="Firstname" required placeholder="First name">
                         </div>
                         <div class="field">
-                            <label>Last Name</label>
-                            <input type="text" id="LastName" name="LastName" required placeholder="LastName">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" id="LastName" name="LastName" required placeholder="Last name">
                         </div>
                         <div class="field full">
-                            <label>Email Address</label>
+                            <label for="email">Email Address</label>
                             <input type="email" id="email" name="email" required placeholder="name@example.com">
                         </div>
                         <div class="field relative">
-                            <label>Password</label>
+                            <label for="password">Password</label>
                             <input type="password" id="password" name="password" required>
                             <i class="fa-solid fa-eye toggle-pw" id="show-password"></i>
                         </div>
                         <div class="field relative">
-                            <label>Confirm Password</label>
+                            <label for="confirm_password">Confirm Password</label>
                             <input type="password" id="confirm_password" name="confirm_password" required>
-                            <i class="fa-solid fa-eye toggle-pw" id="show-password-signup"></i>
+                            <i class="fa-solid fa-eye toggle-pw" id="show-confirm"></i>
                         </div>
                         <div class="field">
-                            <label>Phone</label>
-                            <input type="text" id="phone" name="phone" required placeholder="Phone Number">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="Phone Number">
                         </div>
                         <div class="field">
-                            <label>Date of Birth</label>
+                            <label for="dob">Date of Birth</label>
                             <input type="date" id="dob" name="dob" required>
                         </div>
                         <div class="field full">
-                            <label>Gender</label>
+                            <label for="gender">Gender</label>
                             <select id="gender" name="gender" required>
                                 <option value="">Select Gender</option>
                                 <option value="Male">Male</option>
@@ -87,21 +93,23 @@
     </div>
 
     <script>
-        // Password toggles
+        // Toggle password visibility
         document.querySelectorAll('.toggle-pw').forEach(icon => {
             icon.addEventListener('click', function() {
                 const input = this.previousElementSibling;
-                input.type = input.type === 'password' ? 'text' : 'password';
+                const type = input.type === 'password' ? 'text' : 'password';
+                input.type = type;
+                this.classList.toggle('fa-eye');
                 this.classList.toggle('fa-eye-slash');
             });
         });
 
         function submitForm() {
             const form = document.getElementById('signupForm');
-            const password = document.getElementById('password').value;
+            const pw = document.getElementById('password').value;
             const confirm = document.getElementById('confirm_password').value;
 
-            if (password !== confirm) {
+            if (pw !== confirm) {
                 alert("Passwords do not match!");
                 return;
             }

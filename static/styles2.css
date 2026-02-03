@@ -12,63 +12,85 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Universal Scaling */
-html { font-size: 16px; }
-@media (max-width: 1200px) { html { font-size: 15px; } }
-@media (max-width: 768px) { html { font-size: 14px; } }
+/* 1. Reset & Global Box Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Crucial: Prevents elements from being wider than 100% */
+}
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Poppins', sans-serif;
-    margin: 0;
     min-height: 100vh;
+    overflow-x: hidden; /* Prevents accidental horizontal scroll */
 }
 
+/* 2. Page Container - The main centering force */
 .page-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
+    align-items: center;    /* Centers children horizontally */
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 100vh;
+    padding: clamp(1rem, 5vw, 2rem);
 }
 
-/* Header Styling */
+/* 3. Header Styling - Centered Logo */
+.main-header {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center; /* Centers the logo in the header */
+    margin-bottom: 2rem;
+}
+
 .logo {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     color: var(--primary);
     font-weight: 800;
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: clamp(1.2rem, 6vw, 1.8rem);
+    text-transform: uppercase;
 }
 
-/* Card Layout */
+/* 4. Content Wrapper & Result Card */
+.content-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Ensures the card stays in the middle */
+}
+
 .result-card {
     background: var(--card-bg);
     width: 100%;
-    max-width: 1000px;
+    max-width: 800px; /* Reduced slightly for better focus on content */
     border-radius: var(--radius);
-    padding: 2.5rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    padding: clamp(1.25rem, 5vw, 2.5rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    overflow: hidden; /* Added: Prevents any internal overflow from escaping the card */
 }
 
+/* 5. Diagnostic Grid Logic */
 .diagnostic-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* Side by side for large screens */
-    gap: 3rem;
+    grid-template-columns: 1fr 1fr; /* Desktop side-by-side */
+    gap: clamp(1.5rem, 4vw, 3rem);
     margin-top: 1.5rem;
 }
 
 /* Responsive Grid Breakpoint */
 @media (max-width: 850px) {
     .diagnostic-grid {
-        grid-template-columns: 1fr; /* Stacked for tablets and phones */
-        gap: 2rem;
+        grid-template-columns: 1fr; /* Stacked for mobile */
     }
 }
 
-/* Image Section */
+/* 6. Image Section */
 .image-frame {
     width: 100%;
     aspect-ratio: 4 / 3;
@@ -76,7 +98,6 @@ body {
     border-radius: var(--radius);
     overflow: hidden;
     border: 4px solid #f9fafb;
-    box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.06);
 }
 
 .image-frame img {
@@ -85,31 +106,9 @@ body {
     object-fit: cover;
 }
 
-/* Confidence Meter */
-.meter {
-    height: 1rem;
-    background: #e5e7eb;
-    border-radius: 100px;
-    overflow: hidden;
-    margin-top: 0.5rem;
-}
-
-.meter-fill {
-    display: block;
-    height: 100%;
-    width: var(--width); /* Logic passed from HTML */
-    background: linear-gradient(90deg, var(--primary), #60cc5f);
-    border-radius: 100px;
-    animation: slideIn 1.5s ease-out;
-}
-
-@keyframes slideIn {
-    from { width: 0; }
-}
-
-/* Data & Buttons */
+/* 7. Typography & Labels */
 .label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 700;
@@ -117,74 +116,103 @@ body {
 }
 
 .prediction-title {
-    font-size: 2rem;
-    margin: 0.5rem 0 1.5rem;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    margin: 0.5rem 0 1.2rem;
     color: var(--text-main);
-    line-height: 1.2;
+    line-height: 1.3;
+    overflow-wrap: break-word; /* Updated: Modern equivalent of word-wrap */
+    word-break: break-all; /* Added: Forces breaking long strings (e.g., with underscores) */
+    hyphens: auto; /* Added: Allows hyphenation for better wrapping */
 }
 
+/* Mobile-specific adjustment for title */
+@media (max-width: 600px) {
+    .prediction-title {
+        font-size: 1.2rem; /* Slightly smaller on small screens to prevent overflow */
+    }
+}
+
+/* 8. Confidence Level Meter */
+.confidence-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+}
+
+.percentage {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.meter {
+    height: 0.8rem;
+    background: #e5e7eb;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.meter-fill {
+    display: block;
+    height: 100%;
+    width: var(--width);
+    background: linear-gradient(90deg, var(--primary), #60cc5f);
+    border-radius: 100px;
+    transition: width 1.5s ease-out;
+}
+
+/* 9. Action Buttons */
 .action-zone {
     display: flex;
     gap: 1rem;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
 }
 
 @media (max-width: 480px) {
-    .action-zone { flex-direction: column; }
-    .prediction-title { font-size: 1.5rem; }
+    .action-zone { 
+        flex-direction: column; 
+    }
 }
 
-/* Button Styles */
 .btn-primary, .btn-outline {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 0.8rem;
     border-radius: 0.75rem;
     font-weight: 600;
     text-decoration: none;
     transition: var(--transition);
+    font-size: 0.9rem;
 }
 
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    border: none;
-}
+.btn-primary { background: var(--primary); color: white; border: none; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-.btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-}
+.btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+.btn-outline:hover { background: var(--bg-color); }
 
-.btn-outline {
-    background: white;
-    color: var(--primary);
-    border: 2px solid var(--primary);
-}
-
-.btn-outline:hover {
-    background: var(--bg-color);
-}
-
-/* Badge Styling */
+/* 10. Badge & Footer Styling */
 .status-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 2rem;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 600;
+    margin-bottom: 1rem;
 }
 
 .success { background: #dcfce7; color: #166534; }
 .error { background: #fee2e2; color: #991b1b; }
 
 .page-footer {
-    margin-top: 3rem;
+    margin-top: auto;
+    padding: 2rem 0;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    text-align: center;
 }

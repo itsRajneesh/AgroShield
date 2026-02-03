@@ -4,64 +4,149 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AgroShield - AI Diagnosis</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
     <style>
-      /* Specialized styles for the Modern Dashboard Page */
+      :root {
+        --primary-color: #3c9e3b;
+        --text-dark: #1f2937;
+        --bg-light: #efffec;
+        --max-width: 1200px;
+      }
+
+      body {
+        background-color: var(--bg-light);
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      /* Navigation Fix: Prevents hiding elements on mobile */
+      .nav {
+        background: white;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 70px;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+      }
+
+      .nav__content {
+        width: 100%;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo a {
+        font-size: clamp(1.1rem, 4vw, 1.8rem) !important; 
+        font-weight: 800;
+        color: var(--primary-color);
+        text-decoration: none;
+        letter-spacing: -1px;
+      }
+
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .dash-label {
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .logout-link {
+        font-size: 0.8rem;
+        color: #ef4444;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 4px 8px;
+        border: 1px solid #fee2e2;
+        border-radius: 6px;
+      }
+
+      /* Dashboard Layout */
       .dashboard-grid {
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 1fr 1.5fr;
         gap: 2rem;
-        margin-top: 80px; /* Space for fixed nav */
-        padding: 2rem;
+        margin-top: 100px; /* Space below fixed nav */
+        padding: 1rem;
         max-width: var(--max-width);
         margin-left: auto;
         margin-right: auto;
       }
 
-      .upload-card,
-      .result-card {
+      .upload-card, .result-card {
         background: white;
         padding: 2rem;
-        border-radius: 15px;
+        border-radius: 20px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e1f0e1;
       }
 
-      .drop-zone {
+      /* Upload Buttons Styling */
+      .upload-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 1.5rem 0;
+      }
+
+      .opt-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 0.5rem;
         border: 2px dashed var(--primary-color);
+        border-radius: 12px;
+        background: #f9fff9;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .opt-btn i { 
+        font-size: 1.4rem; 
+        color: var(--primary-color); 
+        margin-bottom: 8px; 
+      }
+      .opt-btn span { 
+        font-size: 0.75rem; 
+        font-weight: 600; 
+        color: var(--text-dark); 
+      }
+      .opt-btn:hover { 
+        background: #e8fbe6; 
+        transform: translateY(-2px); 
+      }
+
+      .btn-detect {
+        width: 100%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 1rem;
         border-radius: 10px;
-        padding: 3rem;
-        text-align: center;
-        transition: 0.3s;
-        background: var(--extra-light);
+        font-weight: 700;
+        font-size: 1rem;
         cursor: pointer;
       }
 
-      .drop-zone:hover {
-        background: #d9fbd6;
-      }
-
-      .status-badge {
-        display: inline-block;
-        padding: 5px 15px;
-        border-radius: 20px;
-        background: var(--secondary-color);
-        color: white;
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-      }
-
       @media (max-width: 768px) {
-        .dashboard-grid {
-          grid-template-columns: 1fr;
-          margin-top: 60px;
+        .dashboard-grid { 
+          grid-template-columns: 1fr; 
+          margin-top: 90px; 
+        }
+        .upload-card, .result-card { 
+          padding: 1.5rem; 
         }
       }
     </style>
@@ -73,111 +158,83 @@
           <a href="/">AGROSHIELD</a>
         </div>
         <div class="nav__links">
-          <a href="#" class="logout-button">Dashboard</a>
-          <a
-            href="{{ url_for('logout') }}"
-            class="logout-button"
-            style="background: transparent; color: var(--text-dark)"
-            >Logout</a
-          >
+          <span class="dash-label">Dashboard</span>
+          <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
         </div>
       </div>
     </nav>
 
     <main class="dashboard-grid">
       <section class="upload-card">
-        <span class="status-badge">AI Ready</span>
-        <h2>New Diagnosis</h2>
-        <p class="description">
-          Upload a clear photo of the plant leaf to start the analysis.
-        </p>
+        <span style="background: var(--primary-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">AI READY</span>
+        <h2 style="margin: 15px 0 5px;">New Diagnosis</h2>
+        <p style="color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;">Provide a clear leaf photo for the best results.</p>
 
-        <form
-          action="{{ url_for('predict') }}"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div style="margin: 1.5rem 0">
-            <input
-              type="file"
-              name="file"
-              accept="image/*"
-              required
-              style="
-                width: 100%;
-                padding: 1rem;
-                border: 2px dashed var(--primary-color);
-                border-radius: 10px;
-              "
-            />
+        <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="upload-form">
+          <!-- Single input – prefers camera on mobile -->
+          <input 
+            type="file" 
+            id="photo-input" 
+            name="file" 
+            accept="image/*" 
+            capture="environment" 
+            style="display: none;" 
+          />
+
+          <div class="upload-options">
+            <div class="opt-btn" onclick="document.getElementById('photo-input').click()">
+              <i class="fa-solid fa-images"></i>
+              <span>Choose File</span>
+            </div>
+            <div class="opt-btn" onclick="document.getElementById('photo-input').click()">
+              <i class="fa-solid fa-camera"></i>
+              <span>Open Camera</span>
+            </div>
           </div>
-          <button
-            type="submit"
-            class="hire__me"
-            style="width: 100%; margin-top: 1.5rem"
-          >
-            Run AI Detection
-          </button>
+          
+          <div id="file-name-display" style="font-size: 0.75rem; color: var(--primary-color); text-align: center; margin-bottom: 15px; font-weight: 600;"></div>
+
+          <button type="submit" class="btn-detect">Run AI Detection</button>
         </form>
       </section>
 
       <section class="result-card">
-        <h2>System Instructions</h2>
-        <div
-          class="outer1"
-          style="
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-            margin: 1rem 0;
-          "
-        >
-          <div class="info">
-            <i
-              class="fa-solid fa-circle-check"
-              style="color: var(--primary-color)"
-            ></i>
-            <p>Ensure lighting is bright and natural.</p>
+        <h2 style="margin-top: 0;">System Instructions</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i>
+            <p style="margin: 0; font-size: 0.9rem; color: #374151;">Use bright, natural daylight.</p>
           </div>
-          <div class="info" style="margin-top: 1rem">
-            <i
-              class="fa-solid fa-circle-check"
-              style="color: var(--primary-color)"
-            ></i>
-            <p>Focus specifically on the affected areas of the leaf.</p>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i>
+            <p style="margin: 0; font-size: 0.9rem; color: #374151;">Ensure the leaf is flat and in focus.</p>
           </div>
         </div>
-        <div
-          style="
-            background: #f9fff9;
-            border-left: 4px solid var(--primary-color);
-            padding: 1rem;
-            margin-top: 2rem;
-          "
-        >
-          <p>
-            <strong>Note:</strong> This AI model is trained on over 70,295
-            agricultural samples to provide 98.32% accuracy.
+
+        <div style="background: #f0fdf4; border-left: 4px solid var(--primary-color); padding: 1.2rem; margin-top: 2rem; border-radius: 0 12px 12px 0;">
+          <p style="margin: 0; font-size: 0.8rem; color: #166534; line-height: 1.6;">
+            <strong>Pro Tip:</strong> Multiple samples of the same plant can help confirm the AI's diagnosis.
           </p>
         </div>
       </section>
     </main>
 
-    <footer id="footer" style="margin-top: 4rem">
-      <p class="un">Copyright &#169; 2024 AgroShield. All Rights Reserved.</p>
-    </footer>
-
     <script>
-      function updateFileName(input) {
-        const name = input.files[0]?.name || "No file chosen";
-        document.getElementById("file-name").textContent = "Selected: " + name;
-      }
+      // Show selected file name
+      document.getElementById("photo-input").addEventListener("change", function() {
+        const display = document.getElementById("file-name-display");
+        if (this.files && this.files[0]) {
+          display.innerHTML = `<i class="fa-solid fa-check"></i> Ready: ${this.files[0].name}`;
+        } else {
+          display.innerHTML = "";
+        }
+      });
 
-      document.querySelector("form").addEventListener("submit", function (e) {
-        const fileInput = document.getElementById("upload");
-        if (!fileInput.files || fileInput.files.length === 0) {
+      // Prevent form submission if no file is selected
+      document.getElementById("upload-form").addEventListener("submit", function (e) {
+        if (document.getElementById("photo-input").files.length === 0) {
           e.preventDefault();
-          alert("Please select an image first!");
+          alert("Please select an image or take a photo first!");
         }
       });
     </script>
