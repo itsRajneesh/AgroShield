@@ -199,19 +199,19 @@ MAIN PAGE/
 
 ### Architecture
 
-The model is a transfer learning-based CNN using **EfficientNetB0** as the backbone.
+The model is a transfer learning-based **Convolutional Neural Networks** ( CNN ) using **EfficientNetB0** as the backbone.
 
 - **Base Model**: EfficientNetB0 (pre-trained on ImageNet)
   - Input shape: (224, 224, 3)
   - Weights: "imagenet"
   - Trainable: False (frozen – 4,049,571 non-trainable params)
 - **Custom Head**:
-  - GlobalAveragePooling2D: Reduces spatial dimensions
-  - Dense(512, activation="relu"): High-level feature learning
-  - Dropout(0.5): Regularization to prevent overfitting
-  - Dense(38, activation="softmax"): Output layer for 38 classes
-- **Total Parameters**: 4,724,937
-  - Trainable: 675,366 (only head)
+  - **GlobalAveragePooling2D**: Reduces spatial dimensions
+  - **Dense(512, activation="relu")**: High-level feature learning
+  - **Dropout(0.5)**: Regularization to prevent overfitting
+  - **Dense(38, activation="softmax")**: Output layer for 38 classes
+- **Total Parameters**: 47,24,937
+  - Trainable: 6,75,366 (only head)
   - Non-trainable: 4,049,571 (frozen EfficientNet)
 - **Compilation**:
   - Optimizer: Adam (learning_rate=0.001)

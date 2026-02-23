@@ -93,7 +93,7 @@ def preprocess_image(img_path):
     image = preprocess_input(image)
     return image
 
-# New function to check if image is a plant leaf using OpenCV (green color dominance)
+# Function to check if image is a plant leaf using OpenCV (green color dominance)
 def is_plant_leaf(img_path):
     img = cv2.imread(img_path)
     if img is None:
@@ -278,8 +278,8 @@ def predict():
 
     # First, check if it's a plant leaf using OpenCV
     if not is_plant_leaf(path):
-        # label = "Not a Plant Leaf – Please upload a clear plant leaf image"
-        label = "🤖 RD-powered system here. Plant ki image daalo, bakchodi nahi."
+        label = "Not a Plant Leaf – Please upload a clear plant leaf image"
+        # label = "🤖 RD-powered system here. Plant ki image daalo, bakchodi nahi."
         confidence_display = "N/A"
     else:
         img = preprocess_image(path)
