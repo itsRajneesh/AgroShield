@@ -278,6 +278,7 @@ def predict():
 
     # First, check if it's a plant leaf using OpenCV
     if not is_plant_leaf(path):
+        # Output Result Label
         label = "Not a Plant Leaf – Please upload a clear plant leaf image"
         # label = "🤖 RD-powered system here. Plant ki image daalo, bakchodi nahi."
         confidence_display = "N/A"
